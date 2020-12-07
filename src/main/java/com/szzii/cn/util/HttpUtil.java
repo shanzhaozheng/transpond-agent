@@ -201,10 +201,10 @@ public class HttpUtil {
             if(null == httpClientBuilder) {
                 synchronized (HttpUtil.class) {
                     if(null == httpClientBuilder) {
-                        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(1000)// 连接超时时间
+                        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(3000)// 连接超时时间
                                 .setSocketTimeout(5000)// 请求获取数据的超时时间
                                 .build();
-                        httpClientBuilder = HttpClientBuilder.create().setMaxConnTotal(10) // 连接池中最大连接数
+                        httpClientBuilder = HttpClientBuilder.create().setMaxConnTotal(5) // 连接池中最大连接数
                                 .setDefaultRequestConfig(requestConfig);
                     }
                 }

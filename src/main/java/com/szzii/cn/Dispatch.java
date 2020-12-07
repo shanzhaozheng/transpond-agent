@@ -1,18 +1,13 @@
 package com.szzii.cn;
 
 
-import com.alibaba.fastjson.JSONObject;
-import com.szzii.cn.entity.DingTalkDto;
 import com.szzii.cn.entity.RequestEntity;
-import com.szzii.cn.stereotype.Constant;
 import com.szzii.cn.stereotype.RequestType;
-import com.szzii.cn.util.HttpUtil;
 import com.szzii.cn.util.ThreadUtil;
 import org.apache.http.HttpResponse;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  *
@@ -20,18 +15,13 @@ import java.util.Map;
  */
 public class Dispatch {
 
-    public static void main(String[] args) throws Exception {
-        Map<String, String[]> queryMap = new HashMap<>();
-        queryMap.put("access_token",new String[]{Constant.dingtalk_access_token});
-        DingTalkDto dingTalkDto = new DingTalkDto();
-        dingTalkDto.setText(new DingTalkDto.TextDTO(Constant.keywords + "\n@15943951022\n内网接口异常：" + "url" + "\n状态码："+ "statusCode" + "\n返回信息：" + "body"));
-        dingTalkDto.setMsgtype("text");
-        ArrayList<String> strings = new ArrayList<String>();
-        strings.add("15943951022");
-        dingTalkDto.setAt(new DingTalkDto.AtDTO(false,strings));
-        System.out.println(JSONObject.toJSONString(dingTalkDto));
-        HttpUtil.doPost("https://oapi.dingtalk.com", "/robot/send", new HashMap<>(), queryMap, JSONObject.toJSONString(dingTalkDto));
+    public static final List<Integer> status = new ArrayList<>();
 
+    static {
+        status.add(200);
+        status.add(400);
+        status.add(409);
+        status.add(502);
     }
 
 
@@ -40,34 +30,27 @@ public class Dispatch {
             @Override
             public void run() {
                 try {
-                    String url = requestEntity.getUrl();
                     RequestType requestType = RequestType.valueOf(requestEntity.getMethod());
                     HttpResponse httpResponse = requestType.doRequest(requestEntity);
-                    int statusCode = httpResponse.getStatusLine().getStatusCode();
-                    String body = HttpUtil.getJson(httpResponse);
-
-                    if (statusCode != 200 && statusCode != 400 && statusCode != 409){
-                        Map<String, String[]> queryMap = new HashMap<>();
-                        queryMap.put("access_token",new String[]{Constant.dingtalk_access_token});
-                        DingTalkDto dingTalkDto = new DingTalkDto();
-                        dingTalkDto.setText(new DingTalkDto.TextDTO(Constant.keywords + "\n@15943951022\n内网接口异常：" + url + "\n状态码："+ statusCode + "\n返回信息：" + body));
-                        dingTalkDto.setMsgtype("text");
-                        ArrayList<String> strings = new ArrayList<String>();
-                        strings.add("15943951022");
-                        dingTalkDto.setAt(new DingTalkDto.AtDTO(false,strings));
-                        System.out.println(JSONObject.toJSONString(dingTalkDto));
-                        HttpUtil.doPost("https://oapi.dingtalk.com", "/robot/send", new HashMap<>(), queryMap, JSONObject.toJSONString(dingTalkDto));
+                    // 是否发送钉钉报警
+                    if (!filterStatus(httpResponse.getStatusLine().getStatusCode())){
+                        DingTalkClient.sendDingDing(requestEntity, httpResponse);
                     }
-                    System.out.println("=======================转发地址"+ Constant.URL+" ======================= \n" +
-                            "=======================转发数据======================= \n" +
-                            requestEntity.toString() + "\n" +
-                            "=======================响应数据======================= \n" +
-                            body + "\n" +
-                            "=======================结束=======================");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
     }
+
+
+    public static boolean filterStatus(int statusCode){
+        for (Integer integer : status) {
+            if (statusCode == integer) {
+                 return false;
+            }
+        }
+        return true;
+    }
+
 }
