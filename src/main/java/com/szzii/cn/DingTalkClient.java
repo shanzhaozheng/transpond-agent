@@ -14,6 +14,8 @@ import java.util.Map;
 
 public class DingTalkClient {
 
+
+
     public static String sendDingDing(RequestEntity requestEntity, HttpResponse httpResponse){
         String message = "";
         try {
@@ -55,6 +57,32 @@ public class DingTalkClient {
         }
 
     }
+
+
+    public static String sendDingDingMessage(String messgae){
+        String message = "";
+        DingTalkDto dingTalkDto = new DingTalkDto();
+        Map<String, String[]> queryMap = new HashMap<>();
+        queryMap.put("access_token",new String[]{Constant.dingtalk_access_token});
+        try {
+            message = new StringBuilder(Constant.keywords)
+                    .append("\n@15943951022")
+                    .append("\n").append(messgae).toString();
+            dingTalkDto.setText(new DingTalkDto.TextDTO(message));
+            dingTalkDto.setMsgtype("text");
+            ArrayList<String> strings = new ArrayList<String>();
+            strings.add("15943951022");
+            dingTalkDto.setAt(new DingTalkDto.AtDTO(false,strings));
+            System.out.println(JSONObject.toJSONString(dingTalkDto));
+            HttpUtil.doPost("https://oapi.dingtalk.com", "/robot/send", new HashMap<>(), queryMap, JSONObject.toJSONString(dingTalkDto));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            return message;
+        }
+
+    }
+
 
 
     public static void main(String[] args) throws Exception {
