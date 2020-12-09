@@ -8,7 +8,7 @@ public class Constant {
     public static String URL = "http://course.dapeng.lan:8000";
 
     /**
-     * q
+     *
      */
     public static final String dingtalk_access_token = "b097792a5cf2da974589c28022d0d5bd595940d7e65dbd4b2b377e1f8c8c910c";
 

@@ -53,7 +53,7 @@ public class Dispatch {
                     RequestType requestType = RequestType.valueOf(requestEntity.getMethod());
                     HttpResponse httpResponse = requestType.doRequest(requestEntity);
                     // 是否发送钉钉报警
-                    if (!filterStatus(httpResponse.getStatusLine().getStatusCode())){
+                    if (filterStatus(httpResponse.getStatusLine().getStatusCode())){
                         if (concurrentCounter.incr()){
                             DingTalkClient.sendDingDing(requestEntity, httpResponse);
                         }
