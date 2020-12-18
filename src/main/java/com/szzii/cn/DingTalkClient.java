@@ -36,6 +36,7 @@ public class DingTalkClient {
             DingTalkDto dingTalkDto = new DingTalkDto();
             message = new StringBuilder(Constant.keywords)
                     .append("\n@15943951022")
+                    .append("\n@13625476697")
                     .append("\n内网接口异常：" + reqUrl)
                     .append("\n请求方式：" + requestType)
                     .append("\n请求参数：" + reqParam)
@@ -47,6 +48,7 @@ public class DingTalkClient {
             dingTalkDto.setMsgtype("text");
             ArrayList<String> strings = new ArrayList<String>();
             strings.add("15943951022");
+            strings.add("13625476697");
             dingTalkDto.setAt(new DingTalkDto.AtDTO(false,strings));
             System.out.println(JSONObject.toJSONString(dingTalkDto));
             HttpUtil.doPost("https://oapi.dingtalk.com", "/robot/send", new HashMap<>(), queryMap, JSONObject.toJSONString(dingTalkDto));
@@ -101,6 +103,6 @@ public class DingTalkClient {
         strings.add("15943951022");
         dingTalkDto.setAt(new DingTalkDto.AtDTO(false,strings));
         System.out.println(JSONObject.toJSONString(dingTalkDto));
-        //HttpUtil.doPost("https://oapi.dingtalk.com", "/robot/send", new HashMap<>(), queryMap, JSONObject.toJSONString(dingTalkDto));
+        HttpUtil.doPost("https://oapi.dingtalk.com", "/robot/send", new HashMap<>(), queryMap, JSONObject.toJSONString(dingTalkDto));
     }
 }
