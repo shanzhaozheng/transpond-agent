@@ -51,7 +51,7 @@ public class DingTalkClient {
                     .append("\n请求方式：").append(requestType)
                     .append("\n请求参数：").append(reqParam)
                     .append("\n请求body：").append(reqBody)
-                    .append("\n返回状态码：" + 200)
+                    .append("\n返回状态码：" + resStatusCode)
                     .append("\n返回值差异对比：" + "待处理")
                     .append("\n返回信息：")
                     .append(resBody).toString();

@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class Dispatch {
 
-    public static ConcurrentCounter concurrentCounter = new ConcurrentCounter(0,10,120000);
+    public static ConcurrentCounter concurrentCounter = new ConcurrentCounter(0,5,240000);
 
 
     public static final List<Integer> status = new ArrayList<>();
