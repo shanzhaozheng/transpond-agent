@@ -155,30 +155,13 @@ public class HttpUtil {
         if (null != querys) {
             StringBuilder sbQuery = new StringBuilder();
             for (Map.Entry<String, String[]> query : querys.entrySet()) {
-                if (0 < sbQuery.length()) {
-                    sbQuery.append("&");
-                }
-                String[] value = query.getValue();
-                if (value.length == 1){
-                    if (query.getKey() != null && !query.getKey().equals("")) {
-                        sbQuery.append(query.getKey());
-                        if (value[0] != null && !value[0].equals("")) {
-                            sbQuery.append("=");
-                            sbQuery.append(URLEncoder.encode(value[0], "utf-8"));
+                String[] params = query.getValue();
+                if (params != null){
+                    for (String param : params) {
+                        if (0 < sbQuery.length()) {
+                            sbQuery.append("&");
                         }
-                    }
-                }else {
-                    for (String par : value) {
-                        if (query.getKey() != null && !query.getKey().equals("") && par != null && !par.equals("")) {
-                            sbQuery.append(par);
-                        }
-                        if (query.getKey() != null && !query.getKey().equals("")) {
-                            sbQuery.append(query.getKey());
-                            if (par != null && !par.equals("")) {
-                                sbQuery.append("=");
-                                sbQuery.append(URLEncoder.encode(par, "utf-8"));
-                            }
-                        }
+                        sbQuery.append(query.getKey()).append("=").append(URLEncoder.encode(param, "utf-8"));
                     }
                 }
             }
@@ -188,6 +171,9 @@ public class HttpUtil {
         }
         return sbUrl.toString();
     }
+
+
+
 
     /**
      * 获取 HttpClient

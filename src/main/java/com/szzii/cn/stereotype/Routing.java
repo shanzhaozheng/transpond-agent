@@ -4,7 +4,9 @@ public enum  Routing {
 
     B2B("/b2b","b端接口"),
 
-    B2C("/b2c","c端接口");
+    B2C("/b2c","c端接口"),
+
+    CONSUMER("/consumer","c端接口");
 
 
     private final String url;
