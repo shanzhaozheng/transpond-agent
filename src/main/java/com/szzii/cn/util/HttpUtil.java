@@ -12,6 +12,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -40,6 +41,9 @@ public class HttpUtil {
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
         }
+        System.out.println("请求数据: \r\n " +
+                "headers: " +Arrays.toString(request.getAllHeaders())+ "\r\n" +
+                "URL: " + request.toString() );
         return httpClient.execute(request);
     }
 
@@ -67,6 +71,10 @@ public class HttpUtil {
             request.setEntity(new StringEntity(body, "utf-8"));
 
         }
+        System.out.println("请求数据: \r\n " +
+                "headers: " +Arrays.toString(request.getAllHeaders())+ "\r\n" +
+                "URL: " + request.toString() +
+                "\r\n body:" + body );
         return httpClient.execute(request);
     }
 
@@ -94,6 +102,10 @@ public class HttpUtil {
             request.addHeader("Content-Type","application/json");
             request.setEntity(new StringEntity(body, "utf-8"));
         }
+        System.out.println("请求数据: \r\n " +
+                "headers: " +Arrays.toString(request.getAllHeaders())+ "\r\n" +
+                "URL: " + request.toString() +
+                "\r\n body:" + body );
         return httpClient.execute(request);
     }
 
@@ -116,6 +128,9 @@ public class HttpUtil {
         for (Map.Entry<String, String> e : headers.entrySet()) {
             request.addHeader(e.getKey(), e.getValue());
         }
+        System.out.println("请求数据: \r\n " +
+                "headers: " +Arrays.toString(request.getAllHeaders())+ "\r\n" +
+                "URL: " + request.toString() );
         return httpClient.execute(request);
     }
 
@@ -131,6 +146,10 @@ public class HttpUtil {
             request.addHeader("Content-Type","application/json");
             request.setEntity(new StringEntity(body, "utf-8"));
         }
+        System.out.println("请求数据: \r\n " +
+                "headers: " +Arrays.toString(request.getAllHeaders())+ "\r\n" +
+                "URL: " + request.toString() +
+                "\r\n body:" + body );
         return httpClient.execute(request);
     }
 

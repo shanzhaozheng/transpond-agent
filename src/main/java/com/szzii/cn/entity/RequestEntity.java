@@ -1,14 +1,13 @@
 package com.szzii.cn.entity;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RequestEntity {
+public class RequestEntity implements Cloneable,Serializable {
 
     private String url;
 
@@ -127,5 +126,38 @@ public class RequestEntity {
     @Override
     public String toString() {
        return "url = " + url + "\n" + "method = " + method + "\n" + "headerMap = " + headerMap + "\n" + "parameterMap = " + parameterMap + "\n" + "body = " + body + "\n";
+    }
+
+
+    public RequestEntity deepClone(){
+
+        ByteArrayInputStream bis = null;
+        ObjectInputStream ois=null;
+
+        ByteArrayOutputStream bos= null;
+        ObjectOutputStream oos =null;
+
+        try {
+            bos=new ByteArrayOutputStream();
+            oos=new ObjectOutputStream(bos);
+            oos.writeObject(this);
+
+            bis=new ByteArrayInputStream(bos.toByteArray());
+            ois=new ObjectInputStream(bis);
+            Object object = ois.readObject();
+            return (RequestEntity)object;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                ois.close();
+                bis.close();
+                oos.close();
+                bos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

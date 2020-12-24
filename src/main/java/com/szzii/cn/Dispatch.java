@@ -10,9 +10,6 @@ import org.apache.http.HttpResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -32,30 +29,19 @@ public class Dispatch {
         status.add(502);
     }
 
-    public static void main(String[] args) {
-        for (int i = 0; i < 120; i++) {
-            try {
-                TimeUnit.SECONDS.sleep(1);
-                boolean incr = concurrentCounter.incr();
-                System.out.println(incr);
-            } catch (DingThresholdException | InterruptedException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        System.out.println(concurrentCounter.getCount());
-    }
 
     public static void doDispatch(RequestEntity requestEntity) {
         ThreadUtil.pool.execute(new Runnable() {
             @Override
             public void run() {
                 try {
+                    RequestEntity requestEntityClone = requestEntity.deepClone();
                     RequestType requestType = RequestType.valueOf(requestEntity.getMethod());
                     HttpResponse httpResponse = requestType.doRequest(requestEntity);
                     // 是否发送钉钉报警
                     if (filterStatus(httpResponse.getStatusLine().getStatusCode())){
                         if (concurrentCounter.incr()){
-                            DingTalkClient.sendDingDing(requestEntity, httpResponse);
+                            DingTalkClient.sendDingDing(requestEntityClone, httpResponse);
                         }
                     }
                 }catch (DingThresholdException e){
