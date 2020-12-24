@@ -62,11 +62,15 @@ public class ConcurrentCounter {
     public boolean incr() throws DingThresholdException {
         if (isThreshold()){
             if (lock.tryLock()) {
-                if (flag) {
-                    flag = false;
-                    throw new DingThresholdException("异常太多了！已经连续发送" + count.get() + "次了，让我休息" + timeThreshold / 1000 + "秒在给你发吧。");
-                } else {
-                    return false;
+                try {
+                    if (flag) {
+                        flag = false;
+                        throw new DingThresholdException("异常太多了！已经连续发送" + count.get() + "次了，让我休息" + timeThreshold / 1000 + "秒在给你发吧。");
+                    } else {
+                        return false;
+                    }
+                } finally {
+                    lock.unlock();
                 }
             }
         }else {
@@ -79,19 +83,14 @@ public class ConcurrentCounter {
 
 
     public boolean isThreshold(){
-        if (count.get() >= countThreshold){
-            long difference = System.currentTimeMillis() - startTime;
-            if (difference >= timeThreshold){
-                startTime = System.currentTimeMillis();
-                count.set((int) (count.get()/((difference / timeThreshold) * 2)));
-                flag = true;
-                return false;
-            }else {
-                return true;
-            }
-
-        }else {
+        long difference = System.currentTimeMillis() - startTime;
+        if (difference >= timeThreshold){
+            startTime = System.currentTimeMillis();
+            count.set((int) (count.get()/((difference / timeThreshold) * 2)));
+            flag = true;
             return false;
+        }else {
+            return count.get() >= countThreshold;
         }
     }
 

@@ -10,6 +10,7 @@ import org.apache.http.HttpResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -28,7 +29,6 @@ public class Dispatch {
         status.add(409);
         status.add(502);
     }
-
 
     public static void doDispatch(RequestEntity requestEntity) {
         ThreadUtil.pool.execute(new Runnable() {
