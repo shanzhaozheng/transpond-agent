@@ -35,7 +35,7 @@ public class Dispatch {
             @Override
             public void run() {
                 try {
-                    RequestEntity requestEntityClone = requestEntity.deepClone();
+                    RequestEntity requestEntityClone = requestEntity.clonee();
                     RequestType requestType = RequestType.valueOf(requestEntity.getMethod());
                     HttpResponse httpResponse = requestType.doRequest(requestEntity);
                     // 是否发送钉钉报警

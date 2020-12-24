@@ -2,6 +2,7 @@ package com.szzii.cn;
 
 import com.szzii.cn.entity.RequestEntity;
 import com.szzii.cn.stereotype.Routing;
+import com.szzii.cn.util.CommonUtil;
 import net.bytebuddy.asm.Advice;
 
 import java.lang.reflect.InvocationTargetException;
@@ -12,6 +13,8 @@ import java.lang.reflect.Method;
  * @author szz
  */
 public class DispatchAdvice {
+
+
 
 
     @Advice.OnMethodEnter()
@@ -27,7 +30,7 @@ public class DispatchAdvice {
                 return;
             }
             try {
-                RequestEntity requestEntity = RequestEntity.buildRequestEntity(var1);
+                RequestEntity requestEntity = CommonUtil.buildRequestEntity(var1);
                 Dispatch.doDispatch(requestEntity);
             } catch (Exception e) {
                 e.printStackTrace();
